@@ -24,6 +24,7 @@ using System.IO;
 using UnityEditor;
 using Google.Android.PerformanceTuner.Editor.Proto;
 using FileInfo = Google.Android.PerformanceTuner.Editor.Proto.FileInfo;
+using System.Collections.Generic;
 
 #if APT_ADDRESSABLE_PACKAGE_PRESENT
 using UnityEditor.AddressableAssets.Settings;
@@ -166,8 +167,12 @@ namespace Google.Android.PerformanceTuner.Editor
 
             // Enables scripts in the Utilities folder which depend on the AndroidPerformanceTuner_gen folder having
             // already been generated.
-            PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.Android, 
-                Paths.utilitiesScriptingSymbol);
+            var symbols = new List<string>(PlayerSettings.GetScriptingDefineSymbolsForGroup(BuildTargetGroup.Android).Split(';'));
+            if (!symbols.Contains(Paths.utilitiesScriptingSymbol))
+            {
+                symbols.Add(Paths.utilitiesScriptingSymbol);
+                PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.Android, string.Join(";", symbols));
+            }
 
             // TODO(kseniia): Check for possible inconsistencies in the data, set to false if any found
             // TODO(kseniia): or remove "valid" if all problems could be fixed in-place

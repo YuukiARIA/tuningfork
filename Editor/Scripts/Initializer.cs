@@ -41,7 +41,7 @@ namespace Google.Android.PerformanceTuner.Editor
         private static ProjectData projectData;
         private static EnumInfoHelper enumInfoHelper;
         private static SetupConfig setupConfig;
-        
+
         public static FileInfo ProtoFile => protoFile;
         public static DevDescriptor DevDescriptor => devDescriptor;
         public static ProjectData ProjectData => projectData;
@@ -79,7 +79,8 @@ namespace Google.Android.PerformanceTuner.Editor
             }
         }
 
-        static Initializer()
+        [InitializeOnLoadMethod]
+        static void InitializeOnLoad()
         {
             // When reimporting a project, scripts might be imported before other types of assets are. This covers the
             // case in which the SetupConfig is present in the project but has not yet been imported by the
